@@ -14,4 +14,6 @@ artistRouter.post('/unblock-artist', userController.unblockArtist);
 
 artistRouter.get('/blocked', userController.getBlockedArtists);
 
+artistRouter.get('/', userController.getAllArtists);
+
 module.exports = artistRouter;

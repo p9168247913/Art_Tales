@@ -83,6 +83,12 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ error: 'User not found. Try Registering!!' });
         }
 
+        const blockedUser = await UserArtistLoverModel.findOne({ email })
+
+        if (blockedUser.isBlocked === true) {
+            return res.status(403).json({ error: "Cann't Login, Your account is blocked" });
+        }
+
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ error: 'Invalid email or password!!' });
@@ -149,6 +155,16 @@ const getBlockedArtists = async (req, res) => {
         console.log(error);
     }
 };
+
+const getAllArtistLovers = async (req, res) => {
+    try {
+        const user = await UserArtistModel.find();
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error' });
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -156,4 +172,5 @@ module.exports = {
     blockArtist,
     unblockArtist,
     getBlockedArtists,
+    getAllArtistLovers,
 }

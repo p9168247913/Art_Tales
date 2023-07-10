@@ -8,11 +8,12 @@ artistLoverRouter.post('/login', userController.loginUser);
 
 artistLoverRouter.get('/active', userController.getUnblockedArtists);
 
-artistLoverRouter.post('/block-artist-lover', userController.blockArtist);
+artistLoverRouter.post('/block', userController.blockArtist);
 
-artistLoverRouter.post('/unblock-artist-lover', userController.unblockArtist);
+artistLoverRouter.post('/unblock', userController.unblockArtist);
 
 artistLoverRouter.get('/blocked', userController.getBlockedArtists);
 
+artistLoverRouter.get('/', userController.getAllArtistLovers);
 
 module.exports = artistLoverRouter

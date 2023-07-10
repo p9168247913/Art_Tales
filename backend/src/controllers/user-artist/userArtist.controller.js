@@ -70,7 +70,7 @@ const registerUser = async (req, res) => {
             worksAt,
             performsAt,
             visitingCard,
-            
+
         });
 
         await newUser.save();
@@ -97,6 +97,11 @@ const loginUser = async (req, res) => {
         const user = await UserArtistModel.findOne({ email });
         if (!user) {
             return res.status(401).json({ error: 'User not found. Try Registering!!' });
+        }
+
+        const blockedUser = await UserArtistModel.findOne({ email: email })
+        if (blockedUser.isBlocked === rtue) {
+            return res.status(403).json({ error: "Cann't Login, Your account is blocked" });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
@@ -166,4 +171,13 @@ const getBlockedArtists = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, getUnblockedArtists, blockArtist, unblockArtist, getBlockedArtists, };
+const getAllArtists = async (req, res) => {
+    try {
+        const user = await UserArtistModel.find();
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error' });
+    }
+}
+
+module.exports = { registerUser, loginUser, getUnblockedArtists, blockArtist, unblockArtist, getBlockedArtists, getAllArtists, };
